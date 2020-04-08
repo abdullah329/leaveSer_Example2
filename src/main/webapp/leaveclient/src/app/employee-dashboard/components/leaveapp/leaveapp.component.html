@@ -1,0 +1,87 @@
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="card-title mb-3">نموذج طلب إجازة</div>
+    <form #appForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-12  mb-3">
+          <div class="mb-5">
+            <div class="row row-xs">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="type">نوع الإجازة</label>
+                  <select [(ngModel)]="editable.type"
+                          class="form-control"
+                          id="type"
+                          name="type">
+                    <option value="1">اعتيادية</option>
+                  </select>
+                </div>
+
+              </div>
+              <div class="col-md-12 mt-3 mt-md-0">
+                <div class="form-group">
+                  <label for="datePickerAG" style="text-align: left">تاريخ بدء الإجازة</label>
+                  <div class="input-group">
+                    <input #dq="ngbDatepicker"
+                           [(ngModel)]="editable.startDateAh"
+                           [markDisabled]="isDisabled"
+                           [dayTemplate]="t"
+                           [firstDayOfWeek] = "7"
+                           class="form-control" id="datePickerAG"
+                           name="dp"
+                           ngbDatepicker placeholder="yyyy-mm-dd">
+                    <div class="input-group-append">
+                      <button (click)="dq.toggle()" class="btn btn-secondary" type="button" >
+                        <i class="icon-regular i-Calendar-4"></i>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 mt-3 mt-md-0">
+                <div *ngIf="durationError">
+                    يوجد اجازة متداخلة
+                </div>
+                <div class="form-group ">
+                  <label for="duration">مدة الإجازة</label>
+                  <input #lvNumber="ngModel"
+                         [(ngModel)]="editable.duration" class="form-control" id="duration"
+                         (input)="intersectionLeave($event)"
+                         maxlength="3"
+                         min="0"
+                         name="lvNumber"
+                         pattern="[0-9]*" required
+                         step="1"
+                         type="text">
+                </div>
+
+              </div>
+
+              <div class="col-md-12 mt-3 mt-md-1">
+                <button [disabled]="!appForm.form.valid || durationError"
+                        class="btn btn-info"
+                        type="submit">ارسال
+                </button>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+    <ng-template #t let-date let-focused="focused">
+  <span class="custom-day"
+        [class.focused]="focused"
+        [class.faded]="isDisabledStyle(date)"
+        [class.weekend]="isWeekend(date)"
+  >
+    {{ date.day }}
+  </span>
+    </ng-template>
+  </div>
+</div>
+
